@@ -1,22 +1,35 @@
-let field = document.querySelector(".field");
-
-let typed = [];
-
-let init = () => {
-    field.innerHTML = "&#9615;";
-};
-
-let handle_keys = (e) => {
-    if (e.type == "keydown") {
-        console.log(typed);
-        handle_chars(e.key);
-        handle_special_keys(e.key);
-        output_text();
-        remove_cursor();
-    } else {
-        return null;
+class Editor {
+    constructor() {
+        this.field = document.querySelector(".field");
+        this.typed = [];
     }
-};
+    init() {
+        this.field.innerHTML = "&#9615;";
+    }
+    handle_keys(e) {
+        if (e.type == "keydown") {
+            console.log(typed);
+            handle_chars(e.key);
+            handle_special_keys(e.key);
+            output_text();
+            remove_cursor();
+        } else {
+            return null;
+        }
+    }
+}
+
+// let handle_keys = (e) => {
+//     if (e.type == "keydown") {
+//         console.log(typed);
+//         handle_chars(e.key);
+//         handle_special_keys(e.key);
+//         output_text();
+//         remove_cursor();
+//     } else {
+//         return null;
+//     }
+// };
 
 let output_text = () => {
     cursor();

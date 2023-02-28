@@ -5,81 +5,75 @@ class Editor {
     }
     init() {
         this.field.innerHTML = "&#9615;";
+        this.handle_keys();
     }
-    handle_keys(e) {
-        if (e.type == "keydown") {
-            console.log(typed);
-            handle_chars(e.key);
-            handle_special_keys(e.key);
-            output_text();
-            remove_cursor();
-        } else {
-            return null;
+    handle_keys() {
+        document.body.addEventListener(
+            "keydown",
+            (e) => {
+                if (e.type == "keydown") {
+                    console.log(this.typed);
+                    this.handle_chars(e.key);
+                    this.handle_special_keys(e.key);
+                    this.output_text();
+                    this.remove_cursor();
+                } else {
+                    return null;
+                }
+            },
+            false
+        );
+    }
+
+    output_text() {
+        this.cursor();
+
+        //remove text if only backspace is left in typed array
+        if (this.typed.length <= 1 && this.typed[0] == "Backspace") {
+            this.field.innerHTML = "";
         }
+
+        if (this.typed.length >= 0) {
+            this.field.innerHTML = this.typed.join("");
+        }
+    }
+
+    handle_chars(key) {
+        this.typed.push(key);
+    }
+
+    handle_special_keys = (key) => {
+        if (key.length > 1) {
+            if (key == "Backspace" || key == "Delete") {
+                this.typed.pop();
+                this.typed.pop();
+            } else if (key == "Enter") {
+                this.typed.pop();
+                this.typed.push("&#10;&#13;");
+            } else if (key == "Tab") {
+                this.typed.pop();
+                this.typed.push("    ");
+            } else if (key == "ArrowLeft") {
+                this.typed.pop();
+
+                this.typed.splice(this.typed.length - 2, 0, "&#9615;");
+            } else {
+                this.typed.pop();
+            }
+        }
+    };
+
+    cursor() {
+        this.typed.push("&#9615;");
+    }
+
+    remove_cursor() {
+        this.typed.splice(this.typed.length - 1, 1);
     }
 }
 
-// let handle_keys = (e) => {
-//     if (e.type == "keydown") {
-//         console.log(typed);
-//         handle_chars(e.key);
-//         handle_special_keys(e.key);
-//         output_text();
-//         remove_cursor();
-//     } else {
-//         return null;
-//     }
-// };
-
-let output_text = () => {
-    cursor();
-
-    //remove text if only backspace is left in typed array
-    if (typed.length <= 1 && typed[0] == "Backspace") {
-        field.innerHTML = "";
-    }
-
-    if (typed.length >= 0) {
-        field.innerHTML = typed.join("");
-    }
-};
-
-let handle_chars = (key) => {
-    typed.push(key);
-};
-
-let handle_special_keys = (key) => {
-    if (key.length > 1) {
-        if (key == "Backspace" || key == "Delete") {
-            typed.pop();
-            typed.pop();
-        } else if (key == "Enter") {
-            typed.pop();
-            typed.push("&#10;&#13;");
-        } else if (key == "Tab") {
-            typed.pop();
-            typed.push("    ");
-        } else if (key == "ArrowLeft") {
-            typed.pop();
-
-            typed.splice(typed.length - 2, 0, "&#9615;");
-        } else {
-            typed.pop();
-        }
-    }
-};
-
-let cursor = () => {
-    typed.push("&#9615;");
-};
-
-let remove_cursor = () => {
-    typed.splice(typed.length - 1, 1);
-};
+let editor = new Editor();
 
 document.body.onload = () => {
-    init();
+    editor.init();
 };
-
-document.body.addEventListener("keydown", handle_keys, false);
-document.body.addEventListener("keyup", handle_keys, false);

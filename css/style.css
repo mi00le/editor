@@ -6,3 +6,9 @@
 body {
     background-color: rgba(0, 0, 0, 0.8);
 }
+
+.navbar {
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+}
